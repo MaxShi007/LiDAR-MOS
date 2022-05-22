@@ -19,26 +19,16 @@ import math
 from decimal import Decimal
 import random
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 1822377b0acd399d2ecf74a3117ec307e0b3a548
 def set_seed(seed=1024):
     random.seed(seed)
     # os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
-<<<<<<< HEAD
-    torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
-    torch.backends.cudnn.benchmark = False
-    torch.backends.cudnn.deterministic = True
-=======
     torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
 
->>>>>>> 1822377b0acd399d2ecf74a3117ec307e0b3a548
 
 def remove_exponent(d):
     return d.quantize(Decimal(1)) if d == d.to_integral() else d.normalize()
