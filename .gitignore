@@ -5,6 +5,10 @@
 # special for LiDAR-MOS
 *.idea*
 __pycache__
+log/
+infer/
+test.py
+model_salsanext_residual_1
 
 
 ### C++ ###
