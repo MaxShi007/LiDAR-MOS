@@ -1,0 +1,52 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "train",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/LiDAR-MOS/mos_SalsaNext/train/tasks/semantic/train.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "-d",
+                "/share/sunjiadai/semantic_kitti/dataset",
+                "-ac",
+                "/root/LiDAR-MOS/mos_SalsaNext/salsanext_mos.yml",
+                "-l",
+                "/root/LiDAR-MOS/log",
+                "-c",
+                "1,2,3",
+                "-p",
+                "",
+                "-u",
+                "false",
+                "-dc",
+                "/root/LiDAR-MOS/config/semantic-kitti-mos.yaml",
+            ],
+            "cwd": "/root/LiDAR-MOS/mos_SalsaNext/train/tasks/semantic",
+        },
+        {
+            "name": "infer",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/LiDAR-MOS/mos_SalsaNext/train/tasks/semantic/infer.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "-d",
+                "/share/sgb/semantic_kitti/dataset",
+                "-m",
+                "/share/sgb/2022-5-09-14:39",
+                "-l",
+                "/root/LiDAR-MOS/data/infer/predictions_salsanext_residual_1",
+                "-s",
+                "valid"
+            ],
+            "cwd": "/root/LiDAR-MOS/mos_SalsaNext/train/tasks/semantic",
+        }
+    ]
+}

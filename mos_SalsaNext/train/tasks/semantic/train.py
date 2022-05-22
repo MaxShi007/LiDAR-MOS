@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # This file is covered by the LICENSE file in the root of this project.
+import sys
 
 import argparse
 import datetime
@@ -18,18 +19,30 @@ import math
 from decimal import Decimal
 import random
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1822377b0acd399d2ecf74a3117ec307e0b3a548
 def set_seed(seed=1024):
     random.seed(seed)
     # os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
+<<<<<<< HEAD
     torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
+=======
+    torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+
+>>>>>>> 1822377b0acd399d2ecf74a3117ec307e0b3a548
 
 def remove_exponent(d):
     return d.quantize(Decimal(1)) if d == d.to_integral() else d.normalize()
+
 
 def millify(n, precision=0, drop_nulls=True, prefixes=[]):
     millnames = ['', 'k', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y']
@@ -37,8 +50,7 @@ def millify(n, precision=0, drop_nulls=True, prefixes=[]):
         millnames = ['']
         millnames.extend(prefixes)
     n = float(n)
-    millidx = max(0, min(len(millnames) - 1,
-                         int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))))
+    millidx = max(0, min(len(millnames) - 1, int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))))
     result = '{:.{precision}f}'.format(n / 10**(3 * millidx), precision=precision)
     if drop_nulls:
         result = remove_exponent(Decimal(result))
@@ -47,7 +59,7 @@ def millify(n, precision=0, drop_nulls=True, prefixes=[]):
 
 def str2bool(v):
     if isinstance(v, bool):
-       return v
+        return v
     if v.lower() in ('yes', 'true', 't', 'y'):
         return True
     elif v.lower() in ('no', 'false', 'f', 'n'):
@@ -55,56 +67,39 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean expected')
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("./train.py")
     parser.add_argument(
-        '--dataset', '-d',
+        '--dataset',
+        '-d',
         type=str,
         required=True,
         help='Dataset to train with. No Default',
     )
     parser.add_argument(
-        '--arch_cfg', '-ac',
+        '--arch_cfg',
+        '-ac',
         type=str,
         required=True,
         help='Architecture yaml cfg file. See /config/arch for sample. No default!',
     )
     parser.add_argument(
-        '--data_cfg', '-dc',
+        '--data_cfg',
+        '-dc',
         type=str,
         required=False,
         default='config/labels/semantic-kitti-mos.yaml',
         help='Classification yaml cfg file. See /config/labels for sample. No default!',
     )
-    parser.add_argument(
-        '--log', '-l',
-        type=str,
-        default="~/output",
-        help='Directory to put the log data. Default: ~/logs/date+time'
-    )
-    parser.add_argument(
-        '--name', '-n',
-        type=str,
-        default="",
-        help='If you want to give an aditional discriptive name'
-    )
-    parser.add_argument(
-        '--pretrained', '-p',
-        type=str,
-        required=False,
-        default=None,
-        help='Directory to get the pretrained model. If not passed, do from scratch!'
-    )
-    parser.add_argument(
-        '--uncertainty', '-u',
-        type=str2bool, nargs='?',
-        const=True, default=True,
-        help='Set this if you want to use the Uncertainty Version'
-    )
+    parser.add_argument('--log', '-l', type=str, default="~/output", help='Directory to put the log data. Default: ~/logs/date+time')
+    parser.add_argument('--name', '-n', type=str, default="", help='If you want to give an aditional discriptive name')
+    parser.add_argument('--pretrained', '-p', type=str, required=False, default=None, help='Directory to get the pretrained model. If not passed, do from scratch!')
+    parser.add_argument('--uncertainty', '-u', type=str2bool, nargs='?', const=True, default=True, help='Set this if you want to use the Uncertainty Version')
 
     FLAGS, unparsed = parser.parse_known_args()
     FLAGS.log = FLAGS.log + '/logs/' + datetime.datetime.now().strftime("%Y-%-m-%d-%H:%M") + FLAGS.name
-    
+
     # open arch config file
     try:
         print("Opening arch config file %s" % FLAGS.arch_cfg)
@@ -122,7 +117,7 @@ if __name__ == '__main__':
         print(e)
         print("Error opening data yaml file.")
         quit()
-    
+
     if FLAGS.uncertainty:
         params = SalsaNextUncertainty(20)
         pytorch_total_params = sum(p.numel() for p in params.parameters() if p.requires_grad)
@@ -136,7 +131,7 @@ if __name__ == '__main__':
     print("arch_cfg", FLAGS.arch_cfg)
     print("data_cfg", FLAGS.data_cfg)
     print("uncertainty", FLAGS.uncertainty)
-    print("Total of Trainable Parameters: {}".format(millify(pytorch_total_params,2)))
+    print("Total of Trainable Parameters: {}".format(millify(pytorch_total_params, 2)))
     print("log", FLAGS.log)
     print("pretrained", FLAGS.pretrained)
     print("----------\n")
@@ -186,5 +181,5 @@ if __name__ == '__main__':
 
     set_seed()
     # create trainer and start the training
-    trainer = Trainer(ARCH, DATA, FLAGS.dataset, FLAGS.log, FLAGS.pretrained,FLAGS.uncertainty)
+    trainer = Trainer(ARCH, DATA, FLAGS.dataset, FLAGS.log, FLAGS.pretrained, FLAGS.uncertainty)
     trainer.train()
