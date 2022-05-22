@@ -16,6 +16,17 @@ from tasks.semantic.modules.SalsaNext import *
 #from tasks.semantic.modules.save_dataset_projected import *
 import math
 from decimal import Decimal
+import random
+
+def set_seed(seed=1024):
+    random.seed(seed)
+    # os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
 
 def remove_exponent(d):
     return d.quantize(Decimal(1)) if d == d.to_integral() else d.normalize()
@@ -173,6 +184,7 @@ if __name__ == '__main__':
         print("Error copying files, check permissions. Exiting...")
         quit()
 
+    set_seed()
     # create trainer and start the training
     trainer = Trainer(ARCH, DATA, FLAGS.dataset, FLAGS.log, FLAGS.pretrained,FLAGS.uncertainty)
     trainer.train()
